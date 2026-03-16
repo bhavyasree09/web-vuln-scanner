@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+/* =============================================
+   LIGHT THEME — default
+   Palette: #000807 #a2a3bb #9395d3 #b3b7ee #fbf9ff
+   ============================================= */
+:root,
+[data-theme="light"] {
+  --bg:           #fbf9ff;
+  --bg-secondary: #ededf8;
+  --surface:      #ffffff;
+  --surface-2:    #f0effe;
+  --border:       #b3b7ee;
+  --border-soft:  #d8daef;
+  --accent:       #9395d3;
+  --accent-hover: #7b7dbf;
+  --accent-glow:  rgba(147, 149, 211, 0.3);
+  --text-primary: #000807;
+  --text-secondary: #4a4b6a;
+  --text-muted:   #a2a3bb;
+  --nav-bg:       rgba(255,255,255,0.85);
+  --card-shadow:  0 2px 16px rgba(0,0,0,0.08);
+  --input-bg:     #f5f4ff;
+  --input-border: #b3b7ee;
+}
+
+/* =============================================
+   DARK THEME
+   Palette: #020202 #0e0e10 #1e1c2d #0a075c #18133a
+   ============================================= */
+[data-theme="dark"] {
+  --bg:           #0e0e10;
+  --bg-secondary: #020202;
+  --surface:      #1e1c2d;
+  --surface-2:    #18133a;
+  --border:       #0a075c;
+  --border-soft:  #2a2650;
+  --accent:       #9395d3;
+  --accent-hover: #b3b7ee;
+  --accent-glow:  rgba(10, 7, 92, 0.5);
+  --text-primary: #fbf9ff;
+  --text-secondary:#a2a3bb;
+  --text-muted:   #6b6b8a;
+  --nav-bg:       rgba(14,14,16,0.85);
+  --card-shadow:  0 2px 24px rgba(10,7,92,0.25);
+  --input-bg:     #18133a;
+  --input-border: #0a075c;
+}
+
+/* =============================================
+   GLOBAL
+   ============================================= */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: var(--bg);
+  color: var(--text-primary);
+  min-height: 100vh;
+  transition: background-color 0.25s, color 0.25s;
+}
+
+#root { min-height: 100vh; }
+
+/* =============================================
+   SEVERITY BADGES
+   ============================================= */
+.badge-critical { background: rgba(220,38,38,0.12); color: #ef4444; border: 1px solid rgba(220,38,38,0.35); }
+.badge-high     { background: rgba(234,88,12,0.12);  color: #f97316; border: 1px solid rgba(234,88,12,0.35); }
+.badge-medium   { background: rgba(217,119,6,0.12);  color: #f59e0b; border: 1px solid rgba(217,119,6,0.35); }
+.badge-low      { background: rgba(37,99,235,0.12);  color: #3b82f6; border: 1px solid rgba(37,99,235,0.35); }
+.badge-info     { background: rgba(107,114,128,0.12);color: #6b7280; border: 1px solid rgba(107,114,128,0.35); }
+
+/* =============================================
+   SCROLLBAR
+   ============================================= */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-secondary); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* =============================================
+   ANIMATIONS
+   ============================================= */
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse-glow {
+  0%,100% { box-shadow: 0 0 12px var(--accent-glow); }
+  50%      { box-shadow: 0 0 28px var(--accent-glow), 0 0 50px var(--accent-glow); }
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.animate-fade-in-up { animation: fade-in-up 0.35s ease-out; }
+.glow-pulse          { animation: pulse-glow 2s infinite; }
