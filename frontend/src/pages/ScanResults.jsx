@@ -81,6 +81,8 @@ export default function ScanResults() {
   const [scan, setScan] = useState(null);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
+  const [downloadError, setDownloadError] = useState('');
+  const [downloadingType, setDownloadingType] = useState('');
 
   useEffect(() => {
     api.get(`/scans/${id}`).then(res => setScan(res.data.scan)).finally(() => setLoading(false));
@@ -102,8 +104,45 @@ export default function ScanResults() {
   const owaspHits = new Set();
   vulns.forEach(v => { if (v.owaspId) owaspHits.add(v.owaspId); });
 
-  const downloadReport = (type) => {
-    window.open(`/api/scans/${id}/report/${type}`, '_blank');
+  const getFilenameFromDisposition = (disposition, fallback) => {
+    if (!disposition) return fallback;
+    const utf8Match = disposition.match(/filename\*=UTF-8''([^;]+)/i);
+    if (utf8Match?.[1]) return decodeURIComponent(utf8Match[1]);
+    const asciiMatch = disposition.match(/filename="([^"]+)"/i) || disposition.match(/filename=([^;]+)/i);
+    return asciiMatch?.[1]?.trim() || fallback;
+  };
+
+  const downloadReport = async (type) => {
+    setDownloadError('');
+    setDownloadingType(type);
+
+    try {
+      const response = await api.get(`/scans/${id}/report/${type}`, {
+        responseType: 'blob',
+      });
+
+      const contentType = response.headers['content-type']
+        || (type === 'pdf' ? 'application/pdf' : 'application/json');
+      const filename = getFilenameFromDisposition(
+        response.headers['content-disposition'],
+        `scan-report-${id}.${type}`
+      );
+
+      const blob = new Blob([response.data], { type: contentType });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error(`Failed to download ${type} report:`, error);
+      setDownloadError(`Failed to download ${type.toUpperCase()} report. Please try again.`);
+    } finally {
+      setDownloadingType('');
+    }
   };
 
   return (
@@ -121,13 +160,54 @@ export default function ScanResults() {
             {' · '}{new Date(scan.completedAt).toLocaleString()}
           </p>
         </div>
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <button onClick={() => downloadReport('json')} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '9px 16px', background: '#1f2937', color: '#d1d5db', border: '1px solid #374151', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: '500' }}>
-            <ArrowDownTrayIcon style={{ width: '15px', height: '15px' }} /> JSON
-          </button>
-          <button onClick={() => downloadReport('pdf')} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '9px 16px', background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: '600' }}>
-            <ArrowDownTrayIcon style={{ width: '15px', height: '15px' }} /> PDF Report
-          </button>
+        <div style={{ display: 'flex', gap: '10px', flexDirection: 'column', alignItems: 'flex-end' }}>
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <button
+              onClick={() => downloadReport('json')}
+              disabled={downloadingType !== ''}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '9px 16px',
+                background: '#1f2937',
+                color: '#d1d5db',
+                border: '1px solid #374151',
+                borderRadius: '8px',
+                cursor: downloadingType ? 'not-allowed' : 'pointer',
+                fontSize: '13px',
+                fontWeight: '500',
+                opacity: downloadingType && downloadingType !== 'json' ? 0.7 : 1
+              }}
+            >
+              <ArrowDownTrayIcon style={{ width: '15px', height: '15px' }} />
+              {downloadingType === 'json' ? 'Downloading...' : 'JSON'}
+            </button>
+            <button
+              onClick={() => downloadReport('pdf')}
+              disabled={downloadingType !== ''}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '9px 16px',
+                background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: downloadingType ? 'not-allowed' : 'pointer',
+                fontSize: '13px',
+                fontWeight: '600',
+                opacity: downloadingType && downloadingType !== 'pdf' ? 0.7 : 1
+              }}
+            >
+              <ArrowDownTrayIcon style={{ width: '15px', height: '15px' }} />
+              {downloadingType === 'pdf' ? 'Downloading...' : 'PDF Report'}
+            </button>
+          </div>
+          {downloadError && (
+            <p style={{ color: '#f87171', fontSize: '12px', margin: 0 }}>{downloadError}</p>
+          )}
         </div>
       </div>
 
