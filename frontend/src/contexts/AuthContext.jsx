@@ -22,13 +22,13 @@ export function AuthProvider({ children }) {
   };
 
   const register = async (username, email, password) => {
-    const res = await api.post('/auth/register', { username, email, password });
+    const res = await api.post(`${import.meta.env.VITE_API_URL}/auth/register`, { username, email, password });
     persist(res.data.token, res.data.user);
     return res.data.user;
   };
 
   const googleAuth = async (credential) => {
-    const res = await api.post('/auth/google', { credential });
+    const res = await api.post(`${import.meta.env.VITE_API_URL}/auth/google`, { credential });
     persist(res.data.token, res.data.user);
     return res.data.user;
   };
