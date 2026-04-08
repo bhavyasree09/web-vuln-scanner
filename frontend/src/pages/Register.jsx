@@ -115,11 +115,11 @@ export default function Register() {
             {/* Email (optional) */}
             <div style={{ marginBottom: '12px' }}>
               <label style={{ display: 'block', color: 'var(--text-secondary)', fontSize: '13px', fontWeight: '500', marginBottom: '6px' }}>
-                Email <span style={{ color: 'var(--text-muted)', fontWeight: '400' }}>(optional)</span>
+                Email <span style={{ color: 'var(--text-muted)', fontWeight: '400' }}>*</span>
               </label>
               <div style={{ position: 'relative' }}>
                 <EnvelopeIcon style={{ position: 'absolute', left: '13px', top: '50%', transform: 'translateY(-50%)', width: '16px', height: '16px', color: 'var(--text-muted)' }} />
-                <input type="email" value={email} onChange={e => setEmail(e.target.value)}
+                <input type="email" value={email} onChange={e => setEmail(e.target.value)} required
                   placeholder="you@example.com" style={inputStyle}
                   onFocus={e => e.target.style.borderColor = 'var(--accent)'}
                   onBlur={e => e.target.style.borderColor = 'var(--input-border)'} />
