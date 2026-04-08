@@ -42,7 +42,7 @@ export default function Dashboard() {
 
   const fetchScans = async () => {
     try {
-      const res = await api.get('/scans');
+      const res = await api.get('/api/scans');
       setScans(res.data.scans);
     } catch (err) {
       console.error(err);
