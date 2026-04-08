@@ -29,7 +29,7 @@ export default function NewScan() {
     setLoading(true);
     try {
       const finalUrl = url.startsWith('http') ? url : `http://${url}`;
-      const res = await api.post('/scans', { url: finalUrl });
+      const res = await api.post('/api/scans', { url: finalUrl });
       navigate(`/scan/${res.data.scanId}/progress`);
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to start scan');

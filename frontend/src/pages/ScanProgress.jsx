@@ -40,7 +40,7 @@ export default function ScanProgress() {
   useEffect(() => {
     const poll = async () => {
       try {
-        const res = await api.get(`/scans/${id}`);
+        const res = await api.get(`/api/scans/${id}`);
         setScan(res.data.scan);
         if (res.data.scan.status === 'completed') {
           setTimeout(() => navigate(`/scan/${id}/results`), 1200);
