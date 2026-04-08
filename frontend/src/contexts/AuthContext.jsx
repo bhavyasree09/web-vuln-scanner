@@ -16,7 +16,7 @@ export function AuthProvider({ children }) {
   };
 
   const login = async (username, password) => {
-    const res = await api.post('/auth/login', { username, password });
+    const res = await api.post(`${import.meta.env.VITE_API_URL}/auth/login`, { username, password });
     persist(res.data.token, res.data.user);
     return res.data.user;
   };
