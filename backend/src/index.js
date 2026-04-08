@@ -12,8 +12,6 @@ const PORT = process.env.PORT || 5000;
 // Connect to MongoDB
 connectDB();
 
-const cors = require("cors");
-
 app.use(cors({
   origin: ["https://web-vuln-scan.vercel.app"],
   methods: ["GET", "POST", "PUT", "DELETE"],
