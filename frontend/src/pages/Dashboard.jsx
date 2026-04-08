@@ -20,10 +20,10 @@ const STATUS_ICONS = {
 
 function StatCard({ label, value, color, sub }) {
   return (
-    <div style={{ background: '#111827', border: '1px solid #1f2937', borderRadius: '12px', padding: '20px 24px' }}>
-      <p style={{ color: '#6b7280', fontSize: '13px', fontWeight: '500', marginBottom: '4px' }}>{label}</p>
-      <p style={{ fontSize: '32px', fontWeight: '800', color: color || '#f9fafb' }}>{value}</p>
-      {sub && <p style={{ color: '#4b5563', fontSize: '12px', marginTop: '4px' }}>{sub}</p>}
+    <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderRadius: '12px', padding: '20px 24px', boxShadow: 'var(--card-shadow)' }}>
+      <p style={{ color: 'var(--text-muted)', fontSize: '13px', fontWeight: '500', marginBottom: '4px' }}>{label}</p>
+      <p style={{ fontSize: '32px', fontWeight: '800', color: color || 'var(--text-primary)' }}>{value}</p>
+      {sub && <p style={{ color: 'var(--text-muted)', fontSize: '12px', marginTop: '4px' }}>{sub}</p>}
     </div>
   );
 }
@@ -55,9 +55,9 @@ export default function Dashboard() {
     e.stopPropagation();
     if (!confirm('Delete this scan?')) return;
     try {
-      await api.delete(`/scans/${id}`);
+      await api.delete(`/api/scans/${id}`);
       setScans(prev => prev.filter(s => s._id !== id));
-    } catch (err) {}
+    } catch (err) { }
   };
 
   const totalVulns = scans.reduce((a, s) => a + (s.summary?.total || 0), 0);
@@ -77,11 +77,11 @@ export default function Dashboard() {
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '32px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <h1 style={{ fontSize: '30px', fontWeight: '800', color: '#f9fafb', marginBottom: '6px' }}>Security Dashboard</h1>
-          <p style={{ color: '#6b7280', fontSize: '15px' }}>Welcome back, <span style={{ color: '#93c5fd' }}>{user?.email}</span></p>
+          <h1 style={{ fontSize: '30px', fontWeight: '800', color: 'var(--text-primary)', marginBottom: '6px' }}>Security Dashboard</h1>
+          <p style={{ color: 'var(--text-muted)', fontSize: '15px' }}>Welcome back, <span style={{ color: 'var(--accent)' }}>{user?.username}</span></p>
         </div>
         <Link to="/scan/new">
-          <button style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)', color: '#fff', border: 'none', padding: '11px 22px', borderRadius: '10px', fontSize: '14px', fontWeight: '600', cursor: 'pointer' }}>
+          <button style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'var(--btn-gradient)', color: '#fff', border: 'none', padding: '11px 22px', borderRadius: '10px', fontSize: '14px', fontWeight: '600', cursor: 'pointer' }}>
             <PlusCircleIcon style={{ width: '18px', height: '18px' }} />
             New Scan
           </button>
@@ -97,20 +97,20 @@ export default function Dashboard() {
       </div>
 
       {/* Scan History Table */}
-      <div style={{ background: '#111827', border: '1px solid #1f2937', borderRadius: '16px', overflow: 'hidden' }}>
-        <div style={{ padding: '20px 24px', borderBottom: '1px solid #1f2937', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <ShieldExclamationIcon style={{ width: '20px', height: '20px', color: '#3b82f6' }} />
-          <h2 style={{ fontSize: '16px', fontWeight: '700', color: '#f9fafb' }}>Scan History</h2>
+      <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderRadius: '16px', overflow: 'hidden', boxShadow: 'var(--card-shadow)' }}>
+        <div style={{ padding: '20px 24px', borderBottom: '1px solid var(--card-border)', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <ShieldExclamationIcon style={{ width: '20px', height: '20px', color: 'var(--accent)' }} />
+          <h2 style={{ fontSize: '16px', fontWeight: '700', color: 'var(--text-primary)' }}>Scan History</h2>
         </div>
 
         {loading ? (
-          <div style={{ padding: '60px', textAlign: 'center', color: '#6b7280' }}>Loading scans...</div>
+          <div style={{ padding: '60px', textAlign: 'center', color: 'var(--text-muted)' }}>Loading scans...</div>
         ) : scans.length === 0 ? (
           <div style={{ padding: '60px', textAlign: 'center' }}>
-            <ShieldExclamationIcon style={{ width: '48px', height: '48px', color: '#374151', margin: '0 auto 16px' }} />
-            <p style={{ color: '#6b7280', fontSize: '16px', marginBottom: '16px' }}>No scans yet. Start your first scan!</p>
+            <ShieldExclamationIcon style={{ width: '48px', height: '48px', color: 'var(--border)', margin: '0 auto 16px' }} />
+            <p style={{ color: 'var(--text-muted)', fontSize: '16px', marginBottom: '16px' }}>No scans yet. Start your first scan!</p>
             <Link to="/scan/new">
-              <button style={{ background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)', color: '#fff', border: 'none', padding: '10px 24px', borderRadius: '8px', cursor: 'pointer', fontWeight: '600' }}>
+              <button style={{ background: 'var(--btn-gradient)', color: '#fff', border: 'none', padding: '10px 24px', borderRadius: '8px', cursor: 'pointer', fontWeight: '600' }}>
                 Start Scanning
               </button>
             </Link>
@@ -119,22 +119,22 @@ export default function Dashboard() {
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
-                <tr style={{ background: '#0f172a' }}>
+                <tr style={{ background: 'var(--table-header)' }}>
                   {['Target URL', 'Status', 'Progress', 'Vulns', 'Critical', 'Date', 'Actions'].map(h => (
-                    <th key={h} style={{ padding: '12px 16px', textAlign: 'left', color: '#6b7280', fontSize: '12px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{h}</th>
+                    <th key={h} style={{ padding: '12px 16px', textAlign: 'left', color: 'var(--text-muted)', fontSize: '12px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {scans.map((scan, i) => (
                   <tr key={scan._id} onClick={() => handleRowClick(scan)} style={{
-                    borderTop: '1px solid #1f2937', cursor: (scan.status === 'completed' || scan.status === 'running' || scan.status === 'queued') ? 'pointer' : 'default',
+                    borderTop: '1px solid var(--card-border)', cursor: (scan.status === 'completed' || scan.status === 'running' || scan.status === 'queued') ? 'pointer' : 'default',
                     transition: 'background 0.15s'
                   }}
-                    onMouseEnter={e => e.currentTarget.style.background = '#1f2937'}
+                    onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-2)'}
                     onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
                     <td style={{ padding: '14px 16px', maxWidth: '280px' }}>
-                      <span style={{ color: '#93c5fd', fontSize: '14px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'block' }}>{scan.url}</span>
+                      <span style={{ color: 'var(--accent-link)', fontSize: '14px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'block' }}>{scan.url}</span>
                     </td>
                     <td style={{ padding: '14px 16px' }}>
                       <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: '600', background: `${STATUS_COLORS[scan.status]}22`, color: STATUS_COLORS[scan.status], border: `1px solid ${STATUS_COLORS[scan.status]}44` }}>
@@ -144,15 +144,15 @@ export default function Dashboard() {
                     </td>
                     <td style={{ padding: '14px 16px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <div style={{ width: '80px', height: '4px', background: '#1f2937', borderRadius: '2px', overflow: 'hidden' }}>
-                          <div style={{ width: `${scan.progress || 0}%`, height: '100%', background: 'linear-gradient(90deg, #3b82f6, #8b5cf6)', borderRadius: '2px', transition: 'width 0.5s' }} />
+                        <div style={{ width: '80px', height: '4px', background: 'var(--progress-track)', borderRadius: '2px', overflow: 'hidden' }}>
+                          <div style={{ width: `${scan.progress || 0}%`, height: '100%', background: 'var(--progress-gradient)', borderRadius: '2px', transition: 'width 0.5s' }} />
                         </div>
-                        <span style={{ color: '#6b7280', fontSize: '12px' }}>{scan.progress || 0}%</span>
+                        <span style={{ color: 'var(--text-muted)', fontSize: '12px' }}>{scan.progress || 0}%</span>
                       </div>
                     </td>
                     <td style={{ padding: '14px 16px', color: '#fbbf24', fontWeight: '600', fontSize: '14px' }}>{scan.summary?.total || 0}</td>
                     <td style={{ padding: '14px 16px', color: '#f87171', fontWeight: '600', fontSize: '14px' }}>{scan.summary?.critical || 0}</td>
-                    <td style={{ padding: '14px 16px', color: '#6b7280', fontSize: '13px' }}>
+                    <td style={{ padding: '14px 16px', color: 'var(--text-muted)', fontSize: '13px' }}>
                       {new Date(scan.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                     </td>
                     <td style={{ padding: '14px 16px' }}>

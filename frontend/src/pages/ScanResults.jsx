@@ -36,9 +36,9 @@ function VulnCard({ vuln }) {
         <span style={{ display: 'inline-block', padding: '3px 8px', borderRadius: '5px', fontSize: '10px', fontWeight: '700', letterSpacing: '0.06em', color: cfg.color, background: `${cfg.color}20`, border: `1px solid ${cfg.color}40`, flexShrink: 0 }}>
           {cfg.label}
         </span>
-        <span style={{ flex: 1, color: '#f9fafb', fontSize: '14px', fontWeight: '600' }}>{vuln.title || vuln.type}</span>
-        <span style={{ color: '#6b7280', fontSize: '12px', marginRight: '8px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '200px' }}>{vuln.owaspId}</span>
-        {open ? <ChevronDownIcon style={{ width: '16px', height: '16px', color: '#6b7280', flexShrink: 0 }} /> : <ChevronRightIcon style={{ width: '16px', height: '16px', color: '#6b7280', flexShrink: 0 }} />}
+        <span style={{ flex: 1, color: 'var(--text-primary)', fontSize: '14px', fontWeight: '600' }}>{vuln.title || vuln.type}</span>
+        <span style={{ color: 'var(--text-muted)', fontSize: '12px', marginRight: '8px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '200px' }}>{vuln.owaspId}</span>
+        {open ? <ChevronDownIcon style={{ width: '16px', height: '16px', color: 'var(--text-muted)', flexShrink: 0 }} /> : <ChevronRightIcon style={{ width: '16px', height: '16px', color: 'var(--text-muted)', flexShrink: 0 }} />}
       </button>
 
       {open && (
@@ -46,22 +46,22 @@ function VulnCard({ vuln }) {
           <div style={{ paddingTop: '16px', display: 'grid', gap: '12px' }}>
             {vuln.url && (
               <div>
-                <p style={{ color: '#6b7280', fontSize: '11px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>Affected URL</p>
-                <p style={{ color: '#93c5fd', fontSize: '13px', wordBreak: 'break-all' }}>{vuln.url}</p>
+                <p style={{ color: 'var(--text-muted)', fontSize: '11px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>Affected URL</p>
+                <p style={{ color: 'var(--accent-link)', fontSize: '13px', wordBreak: 'break-all' }}>{vuln.url}</p>
               </div>
             )}
             <div>
-              <p style={{ color: '#6b7280', fontSize: '11px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>Description</p>
-              <p style={{ color: '#d1d5db', fontSize: '13px', lineHeight: '1.6' }}>{vuln.description}</p>
+              <p style={{ color: 'var(--text-muted)', fontSize: '11px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>Description</p>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '13px', lineHeight: '1.6' }}>{vuln.description}</p>
             </div>
             {vuln.evidence && (
               <div>
-                <p style={{ color: '#6b7280', fontSize: '11px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>Evidence</p>
-                <code style={{ display: 'block', background: '#0f172a', border: '1px solid #1f2937', borderRadius: '6px', padding: '10px 12px', color: '#fbbf24', fontSize: '12px', wordBreak: 'break-all' }}>{vuln.evidence}</code>
+                <p style={{ color: 'var(--text-muted)', fontSize: '11px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>Evidence</p>
+                <code style={{ display: 'block', background: 'var(--code-bg)', border: '1px solid var(--card-border)', borderRadius: '6px', padding: '10px 12px', color: '#fbbf24', fontSize: '12px', wordBreak: 'break-all' }}>{vuln.evidence}</code>
               </div>
             )}
             <div>
-              <p style={{ color: '#6b7280', fontSize: '11px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>Recommendation</p>
+              <p style={{ color: 'var(--text-muted)', fontSize: '11px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>Recommendation</p>
               <p style={{ color: '#86efac', fontSize: '13px', lineHeight: '1.6' }}>{vuln.recommendation}</p>
             </div>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
@@ -85,10 +85,10 @@ export default function ScanResults() {
   const [downloadingType, setDownloadingType] = useState('');
 
   useEffect(() => {
-    api.get(`/scans/${id}`).then(res => setScan(res.data.scan)).finally(() => setLoading(false));
+    api.get(`/api/scans/${id}`).then(res => setScan(res.data.scan)).finally(() => setLoading(false));
   }, [id]);
 
-  if (loading) return <div style={{ textAlign: 'center', padding: '80px', color: '#6b7280' }}>Loading results...</div>;
+  if (loading) return <div style={{ textAlign: 'center', padding: '80px', color: 'var(--text-muted)' }}>Loading results...</div>;
   if (!scan) return <div style={{ textAlign: 'center', padding: '80px', color: '#f87171' }}>Scan not found</div>;
 
   const vulns = [...(scan.vulnerabilities || [])].sort((a, b) => {
@@ -117,7 +117,7 @@ export default function ScanResults() {
     setDownloadingType(type);
 
     try {
-      const response = await api.get(`/scans/${id}/report/${type}`, {
+      const response = await api.get(`/api/scans/${id}/report/${type}`, {
         responseType: 'blob',
       });
 
@@ -152,10 +152,10 @@ export default function ScanResults() {
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
             <ShieldCheckIcon style={{ width: '24px', height: '24px', color: '#22c55e' }} />
-            <h1 style={{ fontSize: '26px', fontWeight: '800', color: '#f9fafb' }}>Scan Results</h1>
+            <h1 style={{ fontSize: '26px', fontWeight: '800', color: 'var(--text-primary)' }}>Scan Results</h1>
           </div>
-          <p style={{ color: '#6b7280', fontSize: '14px' }}>
-            Target: <span style={{ color: '#93c5fd' }}>{scan.url}</span>
+          <p style={{ color: 'var(--text-muted)', fontSize: '14px' }}>
+            Target: <span style={{ color: 'var(--accent-link)' }}>{scan.url}</span>
             {' · '}{scan.urlsCrawled || 0} URLs crawled
             {' · '}{new Date(scan.completedAt).toLocaleString()}
           </p>
@@ -170,9 +170,9 @@ export default function ScanResults() {
                 alignItems: 'center',
                 gap: '6px',
                 padding: '9px 16px',
-                background: '#1f2937',
-                color: '#d1d5db',
-                border: '1px solid #374151',
+                background: 'var(--surface-2)',
+                color: 'var(--text-secondary)',
+                border: '1px solid var(--card-border)',
                 borderRadius: '8px',
                 cursor: downloadingType ? 'not-allowed' : 'pointer',
                 fontSize: '13px',
@@ -191,7 +191,7 @@ export default function ScanResults() {
                 alignItems: 'center',
                 gap: '6px',
                 padding: '9px 16px',
-                background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
+                background: 'var(--btn-gradient)',
                 color: '#fff',
                 border: 'none',
                 borderRadius: '8px',
@@ -214,7 +214,7 @@ export default function ScanResults() {
       {/* Summary Cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '12px', marginBottom: '28px' }}>
         {[
-          { label: 'Total', value: summary.total || 0, color: '#f9fafb', key: 'all' },
+          { label: 'Total', value: summary.total || 0, color: 'var(--text-primary)', key: 'all' },
           { label: 'Critical', value: summary.critical || 0, color: '#f87171', key: 'critical' },
           { label: 'High', value: summary.high || 0, color: '#fb923c', key: 'high' },
           { label: 'Medium', value: summary.medium || 0, color: '#fbbf24', key: 'medium' },
@@ -222,12 +222,12 @@ export default function ScanResults() {
           { label: 'Info', value: summary.info || 0, color: '#9ca3af', key: 'info' },
         ].map(({ label, value, color, key }) => (
           <button key={key} onClick={() => setFilter(key)} style={{
-            background: filter === key ? '#1f2937' : '#111827',
-            border: filter === key ? '1px solid #374151' : '1px solid #1f2937',
+            background: filter === key ? 'var(--surface-2)' : 'var(--card-bg)',
+            border: filter === key ? '1px solid var(--border)' : '1px solid var(--card-border)',
             borderRadius: '10px', padding: '16px', cursor: 'pointer', textAlign: 'center', transition: 'all 0.15s'
           }}>
             <p style={{ fontSize: '26px', fontWeight: '800', color, marginBottom: '2px' }}>{value}</p>
-            <p style={{ fontSize: '12px', color: '#6b7280', fontWeight: '500' }}>{label}</p>
+            <p style={{ fontSize: '12px', color: 'var(--text-muted)', fontWeight: '500' }}>{label}</p>
           </button>
         ))}
       </div>
@@ -236,16 +236,16 @@ export default function ScanResults() {
         {/* Vulnerability List */}
         <div>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-            <h2 style={{ fontSize: '16px', fontWeight: '700', color: '#f9fafb' }}>
-              {filter === 'all' ? 'All Vulnerabilities' : `${filter.charAt(0).toUpperCase()+filter.slice(1)} Vulnerabilities`}
-              <span style={{ color: '#6b7280', fontWeight: '400', fontSize: '14px', marginLeft: '8px' }}>({filtered.length})</span>
+            <h2 style={{ fontSize: '16px', fontWeight: '700', color: 'var(--text-primary)' }}>
+              {filter === 'all' ? 'All Vulnerabilities' : `${filter.charAt(0).toUpperCase() + filter.slice(1)} Vulnerabilities`}
+              <span style={{ color: 'var(--text-muted)', fontWeight: '400', fontSize: '14px', marginLeft: '8px' }}>({filtered.length})</span>
             </h2>
           </div>
 
           {filtered.length === 0 ? (
-            <div style={{ background: '#111827', border: '1px solid #1f2937', borderRadius: '12px', padding: '40px', textAlign: 'center' }}>
+            <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderRadius: '12px', padding: '40px', textAlign: 'center' }}>
               <ShieldCheckIcon style={{ width: '40px', height: '40px', color: '#22c55e', margin: '0 auto 12px' }} />
-              <p style={{ color: '#9ca3af', fontSize: '15px' }}>No {filter !== 'all' ? filter : ''} vulnerabilities found</p>
+              <p style={{ color: 'var(--text-muted)', fontSize: '15px' }}>No {filter !== 'all' ? filter : ''} vulnerabilities found</p>
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -256,9 +256,9 @@ export default function ScanResults() {
 
         {/* OWASP Top 10 Panel */}
         <div>
-          <div style={{ background: '#111827', border: '1px solid #1f2937', borderRadius: '16px', padding: '20px', position: 'sticky', top: '80px' }}>
-            <h3 style={{ fontSize: '14px', fontWeight: '700', color: '#f9fafb', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <ShieldCheckIcon style={{ width: '16px', height: '16px', color: '#8b5cf6' }} />
+          <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderRadius: '16px', padding: '20px', position: 'sticky', top: '80px', boxShadow: 'var(--card-shadow)' }}>
+            <h3 style={{ fontSize: '14px', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <ShieldCheckIcon style={{ width: '16px', height: '16px', color: 'var(--accent)' }} />
               OWASP Top 10 (2021)
             </h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -271,26 +271,26 @@ export default function ScanResults() {
                       : <ShieldCheckIcon style={{ width: '16px', height: '16px', color: '#22c55e', flexShrink: 0 }} />
                     }
                     <div style={{ minWidth: 0 }}>
-                      <p style={{ fontSize: '10px', color: '#6b7280', fontWeight: '600' }}>{id}</p>
-                      <p style={{ fontSize: '12px', color: hit ? '#f9fafb' : '#6b7280', fontWeight: hit ? '600' : '400', lineHeight: '1.3' }}>{name}</p>
+                      <p style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: '600' }}>{id}</p>
+                      <p style={{ fontSize: '12px', color: hit ? 'var(--text-primary)' : 'var(--text-muted)', fontWeight: hit ? '600' : '400', lineHeight: '1.3' }}>{name}</p>
                     </div>
                   </div>
                 );
               })}
             </div>
-            <div style={{ marginTop: '16px', padding: '12px', background: '#0f172a', borderRadius: '8px', textAlign: 'center' }}>
-              <p style={{ fontSize: '12px', color: '#6b7280', marginBottom: '4px' }}>Compliance Score</p>
+            <div style={{ marginTop: '16px', padding: '12px', background: 'var(--code-bg)', borderRadius: '8px', textAlign: 'center' }}>
+              <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '4px' }}>Compliance Score</p>
               <p style={{ fontSize: '24px', fontWeight: '800', color: owaspHits.size === 0 ? '#22c55e' : owaspHits.size <= 3 ? '#fbbf24' : '#f87171' }}>
                 {10 - owaspHits.size}/10
               </p>
-              <p style={{ fontSize: '11px', color: '#4b5563' }}>categories clean</p>
+              <p style={{ fontSize: '11px', color: 'var(--text-muted)' }}>categories clean</p>
             </div>
           </div>
         </div>
       </div>
 
       <div style={{ marginTop: '24px' }}>
-        <Link to="/dashboard" style={{ color: '#6b7280', textDecoration: 'none', fontSize: '14px' }}>← Back to Dashboard</Link>
+        <Link to="/dashboard" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '14px' }}>← Back to Dashboard</Link>
       </div>
     </div>
   );

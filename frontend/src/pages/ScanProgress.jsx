@@ -9,10 +9,10 @@ function CheckItem({ label, done, active }) {
       {done
         ? <CheckCircleIcon style={{ width: '18px', height: '18px', color: '#22c55e', flexShrink: 0 }} />
         : active
-          ? <div style={{ width: '18px', height: '18px', border: '2px solid #3b82f6', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 1s linear infinite', flexShrink: 0 }} />
-          : <div style={{ width: '18px', height: '18px', border: '2px solid #374151', borderRadius: '50%', flexShrink: 0 }} />
+          ? <div style={{ width: '18px', height: '18px', border: '2px solid var(--accent)', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 1s linear infinite', flexShrink: 0 }} />
+          : <div style={{ width: '18px', height: '18px', border: '2px solid var(--border)', borderRadius: '50%', flexShrink: 0 }} />
       }
-      <span style={{ fontSize: '14px', color: done ? '#22c55e' : active ? '#93c5fd' : '#6b7280', fontWeight: active ? '600' : '400' }}>{label}</span>
+      <span style={{ fontSize: '14px', color: done ? '#22c55e' : active ? 'var(--accent-link)' : 'var(--text-muted)', fontWeight: active ? '600' : '400' }}>{label}</span>
     </div>
   );
 }
@@ -73,9 +73,9 @@ export default function ScanProgress() {
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '40px 24px' }} className="animate-fade-in-up">
       {/* Header */}
       <div style={{ marginBottom: '32px' }}>
-        <h1 style={{ fontSize: '26px', fontWeight: '800', color: '#f9fafb', marginBottom: '6px' }}>Scanning in Progress</h1>
-        <p style={{ color: '#6b7280', fontSize: '14px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-          Target: <span style={{ color: '#93c5fd' }}>{scan?.url || '...'}</span>
+        <h1 style={{ fontSize: '26px', fontWeight: '800', color: 'var(--text-primary)', marginBottom: '6px' }}>Scanning in Progress</h1>
+        <p style={{ color: 'var(--text-muted)', fontSize: '14px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          Target: <span style={{ color: 'var(--accent-link)' }}>{scan?.url || '...'}</span>
         </p>
       </div>
 
@@ -83,44 +83,44 @@ export default function ScanProgress() {
         <div style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.3)', borderRadius: '16px', padding: '32px', textAlign: 'center' }}>
           <XCircleIcon style={{ width: '48px', height: '48px', color: '#ef4444', margin: '0 auto 16px' }} />
           <p style={{ color: '#f87171', fontSize: '16px', fontWeight: '600', marginBottom: '8px' }}>Scan Failed</p>
-          <p style={{ color: '#6b7280', fontSize: '14px', marginBottom: '24px' }}>{error}</p>
-          <button onClick={() => navigate('/scan/new')} style={{ background: '#3b82f6', color: '#fff', border: 'none', padding: '10px 24px', borderRadius: '8px', cursor: 'pointer', fontWeight: '600' }}>Try Again</button>
+          <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '24px' }}>{error}</p>
+          <button onClick={() => navigate('/scan/new')} style={{ background: 'var(--accent)', color: '#fff', border: 'none', padding: '10px 24px', borderRadius: '8px', cursor: 'pointer', fontWeight: '600' }}>Try Again</button>
         </div>
       ) : (
         <>
           {/* Progress Bar Card */}
-          <div style={{ background: '#111827', border: '1px solid #1f2937', borderRadius: '16px', padding: '28px', marginBottom: '20px' }}>
+          <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderRadius: '16px', padding: '28px', marginBottom: '20px', boxShadow: 'var(--card-shadow)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <MagnifyingGlassIcon style={{ width: '18px', height: '18px', color: '#3b82f6' }} />
-                <span style={{ color: '#e5e7eb', fontSize: '14px', fontWeight: '600' }}>{currentCheck}</span>
+                <MagnifyingGlassIcon style={{ width: '18px', height: '18px', color: 'var(--accent)' }} />
+                <span style={{ color: 'var(--text-secondary)', fontSize: '14px', fontWeight: '600' }}>{currentCheck}</span>
               </div>
-              <span style={{ fontSize: '24px', fontWeight: '800', background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+              <span style={{ fontSize: '24px', fontWeight: '800', color: 'var(--accent)' }}>
                 {progress}%
               </span>
             </div>
 
             {/* Main progress bar */}
-            <div style={{ height: '10px', background: '#1f2937', borderRadius: '5px', overflow: 'hidden', marginBottom: '8px' }}>
+            <div style={{ height: '10px', background: 'var(--progress-track)', borderRadius: '5px', overflow: 'hidden', marginBottom: '8px' }}>
               <div style={{
                 height: '100%', width: `${progress}%`, borderRadius: '5px',
-                background: 'linear-gradient(90deg, #3b82f6, #8b5cf6)',
+                background: 'var(--progress-gradient)',
                 transition: 'width 0.6s ease',
-                boxShadow: '0 0 12px rgba(59,130,246,0.5)'
+                boxShadow: '0 0 12px var(--accent-glow)'
               }} />
             </div>
 
             {scan?.urlsCrawled > 0 && (
-              <p style={{ color: '#6b7280', fontSize: '12px' }}>{scan.urlsCrawled} URLs crawled</p>
+              <p style={{ color: 'var(--text-muted)', fontSize: '12px' }}>{scan.urlsCrawled} URLs crawled</p>
             )}
           </div>
 
           {/* Checks list */}
-          <div style={{ background: '#111827', border: '1px solid #1f2937', borderRadius: '16px', padding: '24px' }}>
-            <h2 style={{ fontSize: '14px', fontWeight: '700', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '16px' }}>
+          <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderRadius: '16px', padding: '24px', boxShadow: 'var(--card-shadow)' }}>
+            <h2 style={{ fontSize: '14px', fontWeight: '700', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '16px' }}>
               Security Checks
             </h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap:'0 24px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '0 24px' }}>
               {checkProgress.map(c => <CheckItem key={c.label} {...c} />)}
             </div>
           </div>

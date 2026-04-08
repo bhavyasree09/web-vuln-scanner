@@ -2,7 +2,7 @@ const { spawn } = require('child_process');
 const path = require('path');
 const Scan = require('../models/Scan');
 
-const SCANNER_PATH = path.join(__dirname, '../../../scanner/main.py');
+const SCANNER_PATH = path.join(__dirname, '../../scanner/main.py');
 
 const runScanner = async (scanId, url) => {
   const pythonPath = process.env.PYTHON_PATH || 'python';

@@ -1,12 +1,10 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { OAuth2Client } = require('google-auth-library');
 const User = require('../models/User');
 const { authRateLimiter } = require('../middleware/rateLimiter');
 
 const router = express.Router();
-const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const signToken = (userId) =>
   jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '7d' });
@@ -83,12 +81,22 @@ router.post('/google', authRateLimiter, async (req, res) => {
     const { credential } = req.body;
     if (!credential) return res.status(400).json({ error: 'Google credential is required' });
 
-    const ticket = await googleClient.verifyIdToken({
-      idToken: credential,
-      audience: process.env.GOOGLE_CLIENT_ID,
+    // The frontend uses implicit flow which sends an access_token.
+    // Validate it by fetching user info from Google's userinfo endpoint.
+    const googleRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+      headers: { Authorization: `Bearer ${credential}` }
     });
-    const payload = ticket.getPayload();
+
+    if (!googleRes.ok) {
+      return res.status(401).json({ error: 'Invalid Google token' });
+    }
+
+    const payload = await googleRes.json();
     const { sub: googleId, email, name, picture } = payload;
+
+    if (!googleId || !email) {
+      return res.status(401).json({ error: 'Could not verify Google account' });
+    }
 
     // Find or create user
     let user = await User.findOne({ googleId });

@@ -7,29 +7,6 @@ const { runScanner } = require('../services/scannerService');
 
 const router = express.Router();
 
-const { exec } = require("child_process");
-
-router.post('/api/scans', (req, res) => {
-  const { url } = req.body;
-
-  exec(`python3 scanner/main.py --url "${url}" --scan-id "123"`, (error, stdout, stderr) => {
-    if (error) {
-      console.error(error);
-      return res.status(500).json({ error: "Scan failed" });
-    }
-
-    try {
-      const result = stdout; // or JSON.parse(stdout) if JSON
-      res.json({
-        status: "completed",
-        output: result
-      });
-    } catch (err) {
-      res.json({ output: stdout });
-    }
-  });
-});
-
 // POST /api/scans — start a new scan
 router.post('/', authMiddleware, scanRateLimiter, async (req, res) => {
   try {
