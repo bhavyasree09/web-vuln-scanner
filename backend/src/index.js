@@ -12,6 +12,14 @@ const PORT = process.env.PORT || 5000;
 // Connect to MongoDB
 connectDB();
 
+const cors = require("cors");
+
+app.use(cors({
+  origin: ["https://web-vuln-scan.vercel.app"],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
+
 // Middleware
 app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
 app.use(express.json());
@@ -19,11 +27,6 @@ app.use(express.json());
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/scans', scanRoutes);
-
-app.use(cors({
-  origin: "https://web-vuln-scan.vercel.app",
-  credentials: true
-}));
 
 app.get("/", (req, res) => {
   res.send("API is running");
