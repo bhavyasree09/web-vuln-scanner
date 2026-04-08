@@ -16,19 +16,19 @@ export function AuthProvider({ children }) {
   };
 
   const login = async (username, password) => {
-    const res = await api.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, { username, password });
+    const res = await api.post('/api/auth/login', { username, password });
     persist(res.data.token, res.data.user);
     return res.data.user;
   };
 
   const register = async (username, email, password) => {
-    const res = await api.post(`${import.meta.env.VITE_API_URL}/api/auth/register`, { username, email, password });
+    const res = await api.post('/api/auth/register', { username, email, password });
     persist(res.data.token, res.data.user);
     return res.data.user;
   };
 
   const googleAuth = async (credential) => {
-    const res = await api.post(`${import.meta.env.VITE_API_URL}/auth/google`, { credential });
+    const res = await api.post('/api/auth/google', { credential });
     persist(res.data.token, res.data.user);
     return res.data.user;
   };
