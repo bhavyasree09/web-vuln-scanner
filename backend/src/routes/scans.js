@@ -12,7 +12,7 @@ const { exec } = require("child_process");
 router.post('/api/scans', (req, res) => {
   const { url } = req.body;
 
-  exec(`python3 /scanner/main.py ${url}`, (error, stdout, stderr) => {
+  exec(`python3 scanner/main.py --url "${url}" --scan-id "123"`, (error, stdout, stderr) => {
     if (error) {
       console.error(error);
       return res.status(500).json({ error: "Scan failed" });

@@ -4,17 +4,17 @@ import argparse
 import time
 from urllib.parse import urlparse
 
-from crawler import Crawler
-from checks.headers import check_headers
-from checks.cookies import check_cookies
-from checks.sqli import check_sqli
-from checks.xss import check_xss
-from checks.csrf import check_csrf
-from checks.open_redirect import check_open_redirect
-from checks.directory_listing import check_directory_listing
-from checks.sensitive_files import check_sensitive_files
-from checks.clickjacking import check_clickjacking
-from owasp_mapper import map_to_owasp
+from scanner.crawler import Crawler
+from scanner.checks.headers import check_headers
+from scanner.checks.cookies import check_cookies
+from scanner.checks.sqli import check_sqli
+from scanner.checks.xss import check_xss
+from scanner.checks.csrf import check_csrf
+from scanner.checks.open_redirect import check_open_redirect
+from scanner.checks.directory_listing import check_directory_listing
+from scanner.checks.sensitive_files import check_sensitive_files
+from scanner.checks.clickjacking import check_clickjacking
+from scanner.owasp_mapper import map_to_owasp
 
 def emit(obj):
     """Print a JSON line to stdout (NDJSON)."""
