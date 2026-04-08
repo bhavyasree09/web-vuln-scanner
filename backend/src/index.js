@@ -14,12 +14,16 @@ connectDB();
 
 // Middleware
 app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
-app.use(cors({ origin: ['http://localhost:5173', 'http://localhost:3000'], credentials: true }));
 app.use(express.json());
 
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/scans', scanRoutes);
+
+app.use(cors({
+  origin: "https://web-vuln-scan.vercel.app",
+  credentials: true
+}));
 
 app.get("/", (req, res) => {
   res.send("API is running");
